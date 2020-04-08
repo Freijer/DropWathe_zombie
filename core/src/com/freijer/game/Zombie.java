@@ -54,13 +54,23 @@ public class Zombie extends ApplicationAdapter {
 	int zaq;
 	int eatFlag = 0;
 	int HP = 1;
+
+	Texture castle;
+	int castleNumber;
+	float castleX[] = new float[castleNumber];
+
+
+
 	//ShapeRenderer shapeRenderer;
+
 
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
 		background = new Texture("country.png");
+		castle = new Texture();
+
 		//shapeRenderer = new ShapeRenderer();
 		zombieCircle = new Circle();
 		fireAngle = new Circle[mansNumber];
