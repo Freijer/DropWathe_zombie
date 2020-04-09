@@ -42,6 +42,7 @@ public class Zombie extends ApplicationAdapter {
 	int passedIndex = 0;
 	BitmapFont scoreFont;
 	Texture gameOver;
+
 	Texture citzen;
 	int citzenNumber = 4;
 	int citzenSpeed = 5;
@@ -49,15 +50,39 @@ public class Zombie extends ApplicationAdapter {
 	float distanceCitzens;
 	float citzenShift[] = new float[citzenNumber];
 	Circle[] citzAngle;
+
 	int eatScore = 0;
 	int passedCitzens = 0;
 	int zaq;
 	int eatFlag = 0;
 	int HP = 1;
-
+//-------
 	Texture castle;
-	int castleNumber;
+	int castleNumber = 2;
+	int castleSpeed = 1;
 	float castleX[] = new float[castleNumber];
+	float distancecastle;
+	//---
+	Texture ground;
+	int groundNumber = 3;
+	float groundSpeed = 0.5f;
+	float groundX[] = new float[groundNumber];
+	float distanceground;
+//--
+	Texture ground2;
+	int groundNumber2 = 3;
+	float groundSpeed2 = 0.5f;
+	float groundX2[] = new float[groundNumber];
+	float distanceground2;
+//--
+	Texture tree;
+	int treeNumber = 3;
+	int treeSpeed = 7;
+	float treeX[] = new float[treeNumber];
+	float distanceTree;
+
+
+//------
 
 
 
@@ -69,7 +94,10 @@ public class Zombie extends ApplicationAdapter {
 	public void create() {
 		batch = new SpriteBatch();
 		background = new Texture("country.png");
-		castle = new Texture();
+		castle = new Texture("castle.png");
+		ground = new Texture("ground.png");
+		ground2 = new Texture("ground.png");
+		tree = new Texture("tree.png");
 
 		//shapeRenderer = new ShapeRenderer();
 		zombieCircle = new Circle();
@@ -97,32 +125,106 @@ public class Zombie extends ApplicationAdapter {
 		gameOver = new Texture("gamover.png");
 		distanceBetweenMans = Gdx.graphics.getWidth() + 500; //растояние между первым и вторям отрядом
 		distanceCitzens = Gdx.graphics.getWidth() + 1500;
+		distancecastle = Gdx.graphics.getWidth() + 600;
+		distanceground = Gdx.graphics.getWidth() + 100;
+		distanceground2 = Gdx.graphics.getWidth() + 100;
+
+		distanceTree = Gdx.graphics.getWidth() + 2000;
 		InitGame();
+
+
 	}
 
 	public void InitGame() {
 		jumpHeigh = Gdx.graphics.getHeight() / 9 - zombie[0].getHeight() / 9;
 		for (int i = 0; i < mansNumber; i++) {
 			manFireX[i] = 500 + Gdx.graphics.getWidth() + i * distanceBetweenMans; //растояние между первым и вторям отрядом
-			mansShift[i] = (random.nextFloat() - 0.5f) * Gdx.graphics.getHeight() / 7 - 50;
+			//mansShift[i] = (random.nextFloat() - 0.5f) * Gdx.graphics.getHeight() / 7 - 50;
 			fireAngle[i] = new Circle();
 		}
 		for (int j = 0; j < mansNumber; j++) {
 			manWeaponX[j] = 1400 + Gdx.graphics.getWidth() + j * distanceBetweenMans; //растояние между первым и вторям отр
-			mansShift[j] = (random.nextFloat() - 0.5f) * Gdx.graphics.getHeight() / 9 - 10;
+			//mansShift[j] = (random.nextFloat() - 0.5f) * Gdx.graphics.getHeight() / 9 - 10;
 			weapAngle[j] = new Circle();
 		}
 		for (int c = 0; c < citzenNumber; c++) {
 			citzenX[c] = 900 + Gdx.graphics.getWidth() + c * distanceCitzens; //растояние между первым и вторям отр
-			citzenShift[c] = (random.nextFloat() - 0.5f) * Gdx.graphics.getHeight() / 9 - 10;
+			//citzenShift[c] = (random.nextFloat() - 0.5f) * Gdx.graphics.getHeight() / 9 - 10;
 			citzAngle[c] = new Circle();
 		}
+		for (int k = 0; k < castleNumber; k++) {
+			castleX[k] = 700 + Gdx.graphics.getWidth() + k * distancecastle; //растояние между первым и вторям отр
+
+		}
+		for (int t = 0; t < groundNumber; t++) {
+			groundX[t] = 1; //растояние между первым и вторям отр
+		}
+		for (int t2 = 0; t2 < groundNumber2; t2++) {
+			groundX2[t2] = 1200; //растояние между первым и вторям отр
+		}
+		for (int tr= 0; tr < treeNumber; tr++) {
+			treeX[tr] = 2500 ; //растояние между первым и вторям отр
+		}
+
+
+
+
 	}
 
 	@Override
 	public void render() {
 		batch.begin();
 		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+		//--------фон
+
+		for (int k = 0; k < castleNumber; k++) {
+			if (castleX[k] < -castle.getWidth()) {
+				castleX[k] = castleNumber * distancecastle;
+			} else {
+				castleX[k] -= castleSpeed;
+				//manFireX[i] -= manSpeed[i];
+			}
+			batch.draw(castle, castleX[k], Gdx.graphics.getHeight() / 8);
+			//fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
+		}
+
+		for (int t = 0; t < groundNumber; t++) {
+			if (groundX[t] < -ground.getWidth()) {
+				groundX[t] = groundNumber+ distanceground;
+			} else {
+				groundX[t] -= groundSpeed;
+				//manFireX[i] -= manSpeed[i];
+			}
+			batch.draw(ground, groundX[t], 5);
+			//fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
+		}
+
+		for (int t2 = 0; t2 < groundNumber2; t2++) {
+			if (groundX2[t2] < -ground2.getWidth()) {
+				groundX2[t2] = groundNumber2+ distanceground2;
+			} else {
+				groundX2[t2] -= groundSpeed2;
+				//manFireX[i] -= manSpeed[i];
+			}
+			batch.draw(ground2, groundX2[t2], 5);
+			//fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
+		}
+
+		for (int tr = 0; tr < treeNumber; tr++) {
+			if (treeX[tr] < -tree.getWidth()) {
+				treeX[tr] = groundNumber2+ distanceground2;
+			} else {
+				treeX[tr] -= treeSpeed;
+				//manFireX[i] -= manSpeed[i];
+			}
+			batch.draw(tree, treeX[tr], Gdx.graphics.getHeight() / 12);
+			//fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
+		}
+
+
+
+//-----кончился фон
 		if (gameStatFlag == 1) {
 			if (eatFlag == 3) {
 				if (Gdx.input.justTouched()) {
@@ -131,7 +233,7 @@ public class Zombie extends ApplicationAdapter {
 					eatFlag = 0;
 				}
 			}
-			if (manFireX[passedIndex] < Gdx.graphics.getWidth() / 2) {
+			if (manFireX[passedIndex] < Gdx.graphics.getWidth() / 30) {
 				gameScore++;
 				if (passedIndex < mansNumber - 1) {
 					passedIndex++;
@@ -139,7 +241,7 @@ public class Zombie extends ApplicationAdapter {
 					passedIndex = 0;
 				}
 			}
-			if (manWeaponX[passedIndex] < Gdx.graphics.getWidth() / 2) {
+			if (manWeaponX[passedIndex] < Gdx.graphics.getWidth() / 30) {
 				gameScore++;
 				if (passedIndex < mansNumber - 1) {
 					passedIndex++;
@@ -150,13 +252,14 @@ public class Zombie extends ApplicationAdapter {
 		}
 		if (gameStatFlag == 1) {
 
+
+
 			for (int i = 0; i < mansNumber; i++) {
 				if (manFireX[i] < -manFire.getWidth()) {
 					manFireX[i] = mansNumber * distanceBetweenMans;
 				} else {
 					manFireX[i] -= manSpeed;
 					//manFireX[i] -= manSpeed[i];
-
 				}
 				batch.draw(manFire, manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i]);
 				fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
@@ -182,6 +285,8 @@ public class Zombie extends ApplicationAdapter {
 				batch.draw(citzen, citzenX[c], Gdx.graphics.getHeight() / 10 + citzenShift[c]);
 				citzAngle[c] = new Circle(citzenX[c], Gdx.graphics.getHeight() / 10 + citzenX[c], 100);
 			}
+
+
 
 			if (Gdx.input.justTouched()) {
 				jumpSpeed = -30;
@@ -249,5 +354,8 @@ public class Zombie extends ApplicationAdapter {
 			}
 			//shapeRenderer.end();
 		}
+
+
+
 	}
 }
