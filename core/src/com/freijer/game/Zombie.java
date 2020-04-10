@@ -18,6 +18,14 @@ import javax.xml.soap.Text;
 
 
 //после сьедения 20 людей зомби мутирует, больше жизней
+
+// движение облаков и второго ряда темных деревьев звдний фон
+// Циивилы исчезают за зомби (после сьедения)
+// тень под зомби всегда есть
+// после сьедения над зомби появляются мозги и поднимаются в воздух на  пару сантиметров и исчезают
+
+
+
 public class Zombie extends ApplicationAdapter {
 	SpriteBatch batch;
 	int zombieStateFlag = 0;
@@ -87,11 +95,16 @@ public class Zombie extends ApplicationAdapter {
 	//---
 	Texture godzilla;
 	int godzillaNumber = 3;
-	int godzillaSpeed = 7;
+	int godzillaSpeed = 1;
 	float godzillaX[] = new float[godzillaNumber];
 	float distanceGodzilla;
-
-
+//--
+	Texture corax;
+	int coraxNumber = 3;
+	int coraxSpeed = 6;
+	float coraxX[] = new float[coraxNumber];
+	float coraxShift[] = new float[coraxNumber];
+	float distanceCorax;
 
 
 
@@ -114,6 +127,7 @@ public class Zombie extends ApplicationAdapter {
 		tree = new Texture("tree.png");
 		sky = new Texture("sky.png");
 		godzilla = new Texture("godzilla.png");
+		corax = new Texture("corax.png");
 
 
 
@@ -148,6 +162,8 @@ public class Zombie extends ApplicationAdapter {
 		distanceground2 = Gdx.graphics.getWidth() + 100;
 		distanceTree = Gdx.graphics.getWidth() + 2000;
 		distanceGodzilla = Gdx.graphics.getWidth() + 1500;
+		distanceCorax = Gdx.graphics.getWidth() + 900;
+
 		InitGame();
 
 
@@ -186,6 +202,10 @@ public class Zombie extends ApplicationAdapter {
 		for (int g= 0; g < godzillaNumber; g++) {
 			godzillaX[g] = 1000 + Gdx.graphics.getWidth() + g * distanceGodzilla; //растояние между первым и вторям отр
 		}
+		for (int cr= 0; cr < coraxNumber; cr++) {
+			coraxX[cr] = 1200 + Gdx.graphics.getWidth() + cr * distanceCorax; //растояние между первым и вторям отр
+			coraxShift[cr] = (random.nextFloat() - 0.5f) * 900 - 50;
+		}
 
 
 
@@ -209,8 +229,6 @@ public class Zombie extends ApplicationAdapter {
 			//fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
 		}
 
-
-		//batch.draw(godzilla, 200, 900, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 		batch.draw(forestBack, 0, -370, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		//--------фон
@@ -247,6 +265,8 @@ public class Zombie extends ApplicationAdapter {
 			batch.draw(ground2, groundX2[t2], 5);
 			//fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
 		}
+
+		batch.draw(zombie[zombieStateFlag], 150, jumpHeigh);
 
 		for (int tr = 0; tr < treeNumber; tr++) {
 			if (treeX[tr] < -tree.getWidth()) {
@@ -324,6 +344,17 @@ public class Zombie extends ApplicationAdapter {
 			}
 
 
+			for (int cr = 0; cr < coraxNumber; cr++) {
+				if (coraxX[cr] < -corax.getWidth()) {
+					coraxX[cr] = coraxNumber * distanceCorax;
+				} else {
+					coraxX[cr] -= coraxSpeed;
+				}
+				batch.draw(corax, 900-coraxX[cr], 900 + coraxShift[cr]);
+
+			}
+
+
 
 			if (Gdx.input.justTouched()) {
 				jumpSpeed = -30;
@@ -370,7 +401,7 @@ public class Zombie extends ApplicationAdapter {
 		}
 //////////////
 
-		batch.draw(zombie[zombieStateFlag], 150, jumpHeigh);
+		//batch.draw(zombie[zombieStateFlag], 150, jumpHeigh);
 
 
 		String ZombieHP = String.valueOf(HP);
