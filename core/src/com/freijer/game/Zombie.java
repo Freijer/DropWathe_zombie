@@ -21,6 +21,9 @@ public class Zombie extends ApplicationAdapter {
 	SpriteBatch batch;
 	int zombieStateFlag = 0;
 	Texture background;
+	Texture forestBack;
+	Texture sky;
+
 	Texture[] zombie;
 	float jumpHeigh;
 	float jumpSpeed = 0;
@@ -77,9 +80,13 @@ public class Zombie extends ApplicationAdapter {
 //--
 	Texture tree;
 	int treeNumber = 3;
-	int treeSpeed = 7;
+	int treeSpeed = 1;
 	float treeX[] = new float[treeNumber];
 	float distanceTree;
+
+
+
+
 
 
 //------
@@ -93,11 +100,15 @@ public class Zombie extends ApplicationAdapter {
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		background = new Texture("country.png");
+		background = new Texture("country1.png");
+		forestBack = new Texture("ForestBack.png");
 		castle = new Texture("castle.png");
 		ground = new Texture("ground.png");
 		ground2 = new Texture("ground.png");
 		tree = new Texture("tree.png");
+		sky = new Texture("sky.png");
+
+
 
 		//shapeRenderer = new ShapeRenderer();
 		zombieCircle = new Circle();
@@ -174,7 +185,9 @@ public class Zombie extends ApplicationAdapter {
 	@Override
 	public void render() {
 		batch.begin();
-		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(sky, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(forestBack, 0, -370, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		//--------фон
 
@@ -185,7 +198,7 @@ public class Zombie extends ApplicationAdapter {
 				castleX[k] -= castleSpeed;
 				//manFireX[i] -= manSpeed[i];
 			}
-			batch.draw(castle, castleX[k], Gdx.graphics.getHeight() / 8);
+			batch.draw(castle, castleX[k], Gdx.graphics.getHeight() / 10);
 			//fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
 		}
 
@@ -196,7 +209,7 @@ public class Zombie extends ApplicationAdapter {
 				groundX[t] -= groundSpeed;
 				//manFireX[i] -= manSpeed[i];
 			}
-			batch.draw(ground, groundX[t], 5);
+			batch.draw(ground, groundX[t], 0);
 			//fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
 		}
 
