@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Intersector;
 import java.awt.Rectangle;
 import java.util.Random;
 
+import javax.xml.soap.Text;
 
 
 //после сьедения 20 людей зомби мутирует, больше жизней
@@ -83,6 +84,8 @@ public class Zombie extends ApplicationAdapter {
 	int treeSpeed = 1;
 	float treeX[] = new float[treeNumber];
 	float distanceTree;
+	//---
+	Texture godzilla;
 
 
 
@@ -107,6 +110,7 @@ public class Zombie extends ApplicationAdapter {
 		ground2 = new Texture("ground.png");
 		tree = new Texture("tree.png");
 		sky = new Texture("sky.png");
+		godzilla = new Texture("godzilla.png");
 
 
 
@@ -187,6 +191,7 @@ public class Zombie extends ApplicationAdapter {
 		batch.begin();
 		//batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.draw(sky, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(godzilla, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.draw(forestBack, 0, -370, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		//--------фон
