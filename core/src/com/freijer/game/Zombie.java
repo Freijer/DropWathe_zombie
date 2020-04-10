@@ -191,7 +191,7 @@ public class Zombie extends ApplicationAdapter {
 		batch.begin();
 		//batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.draw(sky, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		batch.draw(godzilla, 0, 0, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+		batch.draw(godzilla, 200, 900, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 		batch.draw(forestBack, 0, -370, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		//--------фон
