@@ -86,7 +86,10 @@ public class Zombie extends ApplicationAdapter {
 	float distanceTree;
 	//---
 	Texture godzilla;
-
+	int godzillaNumber = 3;
+	int godzillaSpeed = 7;
+	float godzillaX[] = new float[godzillaNumber];
+	float distanceGodzilla;
 
 
 
@@ -143,8 +146,8 @@ public class Zombie extends ApplicationAdapter {
 		distancecastle = Gdx.graphics.getWidth() + 600;
 		distanceground = Gdx.graphics.getWidth() + 100;
 		distanceground2 = Gdx.graphics.getWidth() + 100;
-
 		distanceTree = Gdx.graphics.getWidth() + 2000;
+		distanceGodzilla = Gdx.graphics.getWidth() + 1500;
 		InitGame();
 
 
@@ -178,7 +181,10 @@ public class Zombie extends ApplicationAdapter {
 			groundX2[t2] = 1200; //растояние между первым и вторям отр
 		}
 		for (int tr= 0; tr < treeNumber; tr++) {
-			treeX[tr] = 2500 ; //растояние между первым и вторям отр
+			treeX[tr] = 1500 ; //растояние между первым и вторям отр
+		}
+		for (int g= 0; g < godzillaNumber; g++) {
+			godzillaX[g] = 1000 + Gdx.graphics.getWidth() + g * distanceGodzilla; //растояние между первым и вторям отр
 		}
 
 
@@ -191,7 +197,20 @@ public class Zombie extends ApplicationAdapter {
 		batch.begin();
 		//batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.draw(sky, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		batch.draw(godzilla, 200, 900, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+
+		for (int g = 0; g < godzillaNumber; g++) { // годира
+			if (godzillaX[g] < -godzilla.getWidth()) {
+				godzillaX[g] = godzillaNumber * distanceGodzilla;
+			} else {
+				godzillaX[g] -= godzillaSpeed;
+				//manFireX[i] -= manSpeed[i];
+			}
+			batch.draw(godzilla, godzillaX[g], 900);
+			//fireAngle[i] = new Circle(manFireX[i], Gdx.graphics.getHeight() / 9 + mansShift[i], 100);
+		}
+
+
+		//batch.draw(godzilla, 200, 900, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 		batch.draw(forestBack, 0, -370, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		//--------фон
