@@ -124,7 +124,7 @@ public class Zombie extends ApplicationAdapter {
 		ground = new Texture("ground.png");
 		ground2 = new Texture("ground.png");
 		tree = new Texture("tree.png");
-		sky = new Texture("sky.png");
+		sky = new Texture("skyNoCloud.png");
 		godzilla = new Texture("godzilla.png");
 		corax = new Texture("corax.png");
 		BackTrees = new Texture("BackTrees.png");
