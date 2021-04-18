@@ -28,61 +28,78 @@ import javax.xml.soap.Text;
 // Циивилы исчезают за зомби (после сьедения)
 // тень под зомби всегда есть
 // после сьедения над зомби появляются мозги и поднимаются в воздух на  пару сантиметров и исчезают
-
 //что бы убрать отрисовку фигукр - закоментить все shaprender
 
 public class ZombieProgres extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
+		BitmapFont scoreFont;
+		BitmapFont liveFont;
+		BitmapFont brainFont;
 
 	private Texture background;
 	private Texture forestBack;
 	private Texture forestFront;
-		private Texture [] zombie_little;
-		private int zombiewStateFlag = 0;
+		private Texture starScore;
+		private Texture liveScore;
+		private Texture brainScore;
+			private Texture [] zombie_little;
+			private int zombiewStateFlag = 0;
 
-		private float jumpHigh; //высота прыжка
-		private float jumpSpeed = 0; //скорость
-		private int gameStatFlag = 0; // начальное состояние игы зомби
-	  	private int gameScore = 0; // очки игры
-		private int passIndIndex_man = 0;
+			private float jumpHigh; //высота прыжка
+			private float jumpSpeed = 0; //скорость
+			private int gameStatFlag = 0; // начальное состояние игы зомби
+			private int passIndIndex_man = 0; //сколько прошло мужиков с вилами
+				private int game_score = 0; // очки игры
+				private int brain_score = 0; //количество сьеденных жертв
+				private int liveS_score = 1; // количество жизней. Уменьшается при соприкосновении с врагом и  и можно получить время от времени
 
 
 
-	private Texture man_with_trident;
-		private int speed_man_with_trident = 4;
-			private int numbers_man_with_trident = 5;
-			private float man_with_trident_X[] = new float[numbers_man_with_trident]; //координата X
-			private float distanceBetween_man_with_trident;
+		private Texture man_with_trident;
+			private int speed_man_with_trident = 4;
+				private int numbers_man_with_trident = 5;
+				private float man_with_trident_X[] = new float[numbers_man_with_trident]; //координата X
+				private float distanceBetween_man_with_trident;
 
-	Circle zombieCircle;
-	private Rectangle [] rectangle_man_with_trident;
+		Circle zombieCircle;
+		private Rectangle [] rectangle_man_with_trident;
 
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch(); //картинки
-			shapeRenderer = new ShapeRenderer();//фигуры
+		shapeRenderer = new ShapeRenderer();//фигуры
+			scoreFont = new BitmapFont(); //отрисовка на экране очков
+			scoreFont.setColor(Color.BLACK);
+			scoreFont.getData().setScale(5);
+				liveFont = new BitmapFont(); //отрисовка на экране жизней
+				liveFont.setColor(Color.BLACK);
+				liveFont.getData().setScale(5);
+					brainFont = new BitmapFont(); //отрисовка на экране сьеденных мозгов
+					brainFont.setColor(Color.BLACK);
+					brainFont.getData().setScale(5);
 
-		zombieCircle = new Circle();
-			rectangle_man_with_trident = new Rectangle[numbers_man_with_trident];
+	zombieCircle = new Circle();
+		rectangle_man_with_trident = new Rectangle[numbers_man_with_trident];
 
-		jumpHigh = Gdx.graphics.getHeight()/7;
+	jumpHigh = Gdx.graphics.getHeight()/7;
 
-		background = new Texture("background.png");
-			forestBack = new Texture("ForestBack.png");
-			forestFront = new Texture("ForestFront.png");
-		zombie_little = new Texture[2];
-		zombie_little[0] = new Texture("zombieUp.png");
-		zombie_little[1] = new Texture("zombieDown.png");
-			man_with_trident = new Texture("man_with_trident.png");
-				distanceBetween_man_with_trident = Gdx.graphics.getWidth() -100; //расстояние между парой - пол экрана или Gdx.graphics.getWidth() + 500
-					for (int i = 0; i < numbers_man_with_trident; i++){//заполнение массива  врагом_1 с расстоянием между врагами в цикле между появлением каждого
-						man_with_trident_X[i] = Gdx.graphics.getWidth() + 500 + i *  distanceBetween_man_with_trident;
-						rectangle_man_with_trident[i] = new Rectangle(); //оборачиваем каждого человека с вилами в прямоугольник для границ
-					}
-
-
+		starScore = new Texture("starScore.png");
+		liveScore = new Texture("heartScore.png");
+		brainScore = new Texture("brainScore.png");
+			background = new Texture("background.png");
+				forestBack = new Texture("ForestBack.png");
+				forestFront = new Texture("ForestFront.png");
+			zombie_little = new Texture[2];
+			zombie_little[0] = new Texture("zombieUp.png");
+			zombie_little[1] = new Texture("zombieDown.png");
+				man_with_trident = new Texture("man_with_trident.png");
+					distanceBetween_man_with_trident = Gdx.graphics.getWidth() -100; //расстояние между парой - пол экрана или Gdx.graphics.getWidth() + 500
+						for (int i = 0; i < numbers_man_with_trident; i++){//заполнение массива  врагом_1 с расстоянием между врагами в цикле между появлением каждого
+							man_with_trident_X[i] = Gdx.graphics.getWidth() + 500 + i *  distanceBetween_man_with_trident;
+							rectangle_man_with_trident[i] = new Rectangle(); //оборачиваем каждого человека с вилами в прямоугольник для границ
+						}
 	}
 
 
@@ -97,10 +114,10 @@ public class ZombieProgres extends ApplicationAdapter {
 			gameStatFlag = 1;
 		}
 		if (gameStatFlag ==1) {
-			Gdx.app.log("GameScore", String.valueOf(gameScore));
+			Gdx.app.log("GameScore", String.valueOf(game_score));
 			//--подсчсчет очков за мужиков с вилами, которые прошли за экран, с которыми не столкнулся
 			if (man_with_trident_X[passIndIndex_man] < Gdx.graphics.getWidth()){ //Если мужик с вилой прошел весь экран, очки увеличиваем на 1
-				gameScore++;
+				game_score++;
 				if (passIndIndex_man < numbers_man_with_trident - 1){ //труб у нас пять, проверяем, если их осталось на 1 меньше, переходим к следующей
 					passIndIndex_man++;
 				} else {
@@ -142,7 +159,16 @@ public class ZombieProgres extends ApplicationAdapter {
 		}
 //--
 		batch.draw(zombie_little[zombiewStateFlag],  Gdx.graphics.getWidth()/6, jumpHigh);
-			batch.end();
+
+			batch.draw(starScore, starScore.getWidth()/4, starScore.getHeight()/3); // отрисовка звезды-очков
+				batch.draw(liveScore, starScore.getWidth()+40, liveScore.getHeight()/3); //отрисовка жизней-очков
+					batch.draw(brainScore, starScore.getWidth()*2+40, liveScore.getHeight()/3); //отрисовка мозгов-отчков
+			scoreFont.draw(batch, String.valueOf(game_score), 85, 140); //проритсовка на экране очков
+				liveFont.draw(batch, String.valueOf(liveS_score), 225, 140); //проритсовка на экране жизней
+					brainFont.draw(batch, String.valueOf(brain_score), 360, 140); //проритсовка на экране мозгов сьеденных жертв
+
+		batch.end();
+
 				zombieCircle.set(Gdx.graphics.getWidth()/6+55, jumpHigh+zombie_little[zombiewStateFlag].getHeight()/2, zombie_little[zombiewStateFlag].getWidth()/2+10); //размер активной зоны поражения и поендания зомбаком
 				shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 				shapeRenderer.setColor(Color.CYAN);
