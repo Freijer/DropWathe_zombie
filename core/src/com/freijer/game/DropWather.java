@@ -130,7 +130,7 @@ public class DropWather implements Screen {
 		shadow = new Texture("shadow.png");
 
 		zombie_rectangle = new Rectangle();
-			zombie_rectangle.x = Gdx.graphics.getWidth() / 3; //положение
+			zombie_rectangle.x = Gdx.graphics.getWidth() / 9; //положение
 			zombie_rectangle.y = Gdx.graphics.getHeight() / 9; //положение
 				zombie_rectangle.width = zombie.getWidth(); //размер прямоугольника
 				zombie_rectangle.height = zombie.getHeight(); //размер прямоугольника
@@ -234,44 +234,26 @@ public class DropWather implements Screen {
 	public void render (float delta) {
 
 
-
-
-//		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//		shapeRenderer.setColor(Color.CYAN);
-
-
+		gameStatFlag = 1;
 		Gdx.gl.glClearColor(1, 1, 1, 1);// Очищаем экран
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		spriteBatch.setProjectionMatrix(camera.combined);
 
-			if (gameStatFlag == 1)
-			{ //общий цикл игры
-			}
-				spriteBatch.begin();
 
-
-		spriteBatch.draw(forestOver, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-
+		spriteBatch.begin();
 		if (gameStatFlag == 1) {
+
 			spriteBatch.draw(sky, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-			for (int cl = 0; cl < cloudsNumber; cl++)
-			{ // годира
-				if (cloudsX[cl] < -clouds.getWidth())
-				{
+			for (int cl = 0; cl < cloudsNumber; cl++) { // годира
+				if (cloudsX[cl] < -clouds.getWidth()) {
 					cloudsX[cl] = cloudsNumber * distanceclouds;
-				} else
-				{
-					cloudsX[cl] -= cloudsSpeed;
-				}
+				} else {
+					cloudsX[cl] -= cloudsSpeed; }
 				spriteBatch.draw(clouds, cloudsX[cl] + 50, 50, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-				;
 			}
 
-
-			for (int g = 0; g < godzillaNumber; g++)
-			{ // годира
+			for (int g = 0; g < godzillaNumber; g++) { // годира
 				if (godzillaX[g] < -godzilla.getWidth())
 				{
 					godzillaX[g] = godzillaNumber * distanceGodzilla;
@@ -286,8 +268,7 @@ public class DropWather implements Screen {
 			spriteBatch.draw(BackTrees, 0, -40, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 //--------фон
-			for (int k = 0; k < castleNumber; k++)
-			{
+			for (int k = 0; k < castleNumber; k++) {
 				if (castleX[k] < -castle.getWidth())
 				{
 					castleX[k] = castleNumber * distancecastle;
@@ -297,32 +278,25 @@ public class DropWather implements Screen {
 				}
 				spriteBatch.draw(castle, castleX[k], Gdx.graphics.getHeight() / 10);
 			}
-			for (int t = 0; t < groundNumber; t++)
-			{
-				if (groundX[t] < -ground.getWidth())
-				{
+			for (int t = 0; t < groundNumber; t++) {
+				if (groundX[t] < -ground.getWidth()) {
 					groundX[t] = groundNumber + distanceground;
-				} else
-				{
+				} else {
 					groundX[t] -= groundSpeed;
 				}
 				spriteBatch.draw(ground, groundX[t], 0);
 			}
-			for (int t2 = 0; t2 < groundNumber2; t2++)
-			{
-				if (groundX2[t2] < -ground2.getWidth())
-				{
+			for (int t2 = 0; t2 < groundNumber2; t2++) {
+				if (groundX2[t2] < -ground2.getWidth()) {
 					groundX2[t2] = groundNumber2 + distanceground2;
-				} else
-				{
+				} else {
 					groundX2[t2] -= groundSpeed2;
 				}
 				spriteBatch.draw(ground2, groundX2[t2], 5);
 			}
-			spriteBatch.draw(shadow, 100, 30, Gdx.graphics.getWidth() / 5, Gdx.graphics.getHeight() / 5);
+			spriteBatch.draw(shadow, Gdx.graphics.getWidth() / 9, 30, Gdx.graphics.getWidth() / 5, Gdx.graphics.getHeight() / 5);
 
-			for (int tr = 0; tr < treeNumber; tr++)
-			{
+			for (int tr = 0; tr < treeNumber; tr++) {
 				if (treeX[tr] < -tree.getWidth())
 				{
 					treeX[tr] = groundNumber2 + distanceground2;
@@ -333,9 +307,7 @@ public class DropWather implements Screen {
 				spriteBatch.draw(tree, treeX[tr], Gdx.graphics.getHeight() / 12);
 			}
 
-
-			for (int cr = 0; cr < coraxNumber; cr++)
-			{
+			for (int cr = 0; cr < coraxNumber; cr++) {
 				if (coraxX[cr] < -corax.getWidth())
 				{
 					coraxX[cr] = coraxNumber * distanceCorax;
@@ -346,23 +318,15 @@ public class DropWather implements Screen {
 				spriteBatch.draw(corax, 900 - coraxX[cr], 900 + coraxShift[cr]);
 			}
 
-			spriteBatch.draw(zombie, Gdx.graphics.getWidth() / 3, zombie_rectangle.y);
+			spriteBatch.draw(zombie, Gdx.graphics.getWidth() / 9, zombie_rectangle.y);
 
 			scoreFont.draw(spriteBatch, String.valueOf(game_score), 85, 140); //проритсовка на экране очков
 			for (Rectangle citzendrop: citzen_rectangle){
 				spriteBatch.draw(citzen, citzendrop.x, citzendrop.y);
-				//shapeRenderer.rect(citzendrop.x, citzendrop.y, citzen.getWidth(), citzen.getHeight());
-			}
-
-			//shapeRenderer.rect(zombie_rectangle.x, zombie_rectangle.y, zombie.getWidth(), zombie.getHeight());
-
-
-			if (Gdx.input.justTouched())
-			{
+			} if (Gdx.input.justTouched()) {
 				jumpSpeed = -30;
 			}
-			if (jumpHeigh > Gdx.graphics.getHeight() / 9 || jumpSpeed < 0)
-			{
+			if (jumpHeigh > Gdx.graphics.getHeight() / 9 || jumpSpeed < 0) {
 				jumpSpeed++;
 				jumpHeigh -= jumpSpeed;
 				zombie_rectangle.y = jumpHeigh;
@@ -371,15 +335,11 @@ public class DropWather implements Screen {
 					jumpSpeed = 30;
 				}
 			}
-		} else if (gameStatFlag == 0)
-		{
-			if (Gdx.input.justTouched())
-			{
+		} else if (gameStatFlag == 0) {
+			if (Gdx.input.justTouched()) {
 				Gdx.app.log("tap", "Прыжок");
 				gameStatFlag = 1;
 			}
-
-
 		} else if (gameStatFlag == 2) {
 			spriteBatch.draw(forestOver, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			spriteBatch.draw(gameOver, Gdx.graphics.getWidth() / 2 - gameOver.getWidth() / 2, Gdx.graphics.getHeight() / 2 - gameOver.getHeight() / 2);
@@ -395,19 +355,7 @@ public class DropWather implements Screen {
 			}
 		}
 
-//		spriteBatch.draw(zombie, Gdx.graphics.getWidth() / 3, zombie_rectangle.y);
-//
-//		scoreFont.draw(spriteBatch, String.valueOf(game_score), 85, 140); //проритсовка на экране очков
-//		for (Rectangle citzendrop: citzen_rectangle){
-//			spriteBatch.draw(citzen, citzendrop.x, citzendrop.y);
-//			shapeRenderer.rect(citzendrop.x, citzendrop.y, citzen.getWidth(), citzen.getHeight());
-//		}
-//
-//		shapeRenderer.rect(zombie_rectangle.x, zombie_rectangle.y, zombie.getWidth(), zombie.getHeight());
-
 		spriteBatch.end();
-		//shapeRenderer.end();
-
 
 
 		Iterator<Rectangle> iter = citzen_rectangle.iterator();
@@ -420,8 +368,6 @@ public class DropWather implements Screen {
 				iter.remove();
 			}
 		}
-
-
 
 	}
 
