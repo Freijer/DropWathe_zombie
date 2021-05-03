@@ -189,7 +189,7 @@ public class DropWather implements Screen {
 						   }
 					, 1        //    (delay)
 					, 7 + random_sec_1    //    (seconds)
-					, 5       //    (repeat)
+					, 500       //    (repeat)
 			);
 
 		random_sec_man_trident = 1 + (int) (Math.random() * 3); // Генерация  числа
@@ -202,18 +202,9 @@ public class DropWather implements Screen {
 						   }
 					, 1        //    (delay)
 					, 7 + random_sec_man_trident    //    (seconds)
-					, 5       //    (repeat)
+					, 500       //    (repeat)
 			);
 
-//		Timer.schedule(new Timer.Task(){
-//						   @Override
-//						   public void run() {
-//							   spawn_Boom();
-//						   }
-//					   }
-//				, 1        //    (delay)
-//				, 1    //    (seconds)
-//		);
 
 
 
@@ -313,12 +304,13 @@ public class DropWather implements Screen {
 	}
 
 
+	private float speedFaling = 0;
 
 	@Override
 	public void render (float delta) {
 
 
-		gameStatFlag = 1;
+//		gameStatFlag = 1;
 		Gdx.gl.glClearColor(1, 1, 1, 1);// Очищаем экран
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		spriteBatch.setProjectionMatrix(camera.combined);
@@ -380,6 +372,7 @@ public class DropWather implements Screen {
 			}
 
 
+
 			for (int tr = 0; tr < treeNumber; tr++) {
 				if (treeX[tr] < -tree.getWidth())
 				{
@@ -390,6 +383,7 @@ public class DropWather implements Screen {
 				}
 				spriteBatch.draw(tree, treeX[tr], Gdx.graphics.getHeight() / 12);
 			}
+
 
 			for (int cr = 0; cr < coraxNumber; cr++) {
 				if (coraxX[cr] < -corax.getWidth())
@@ -438,17 +432,18 @@ public class DropWather implements Screen {
 				gameStatFlag = 1;
 			}
 		} else if (gameStatFlag == 2) {
-			spriteBatch.draw(forestOver, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				spriteBatch.draw(forestOver, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 				spriteBatch.draw(gameOver, Gdx.graphics.getWidth() / 2 - gameOver.getWidth() / 2, Gdx.graphics.getHeight() / 2 - gameOver.getHeight() / 2);
-			if (Gdx.input.justTouched())
-			{
+			if (Gdx.input.justTouched()) {
 				Gdx.app.log("tap", "Гамовер");
 				gameStatFlag = 1;
+				speedFaling = 0;
 				eatFlag = 0;
 				InitGame();
 				game_score = 0;
 				brain_score = 0;
 				jumpSpeed = 0;
+				liveS_score = 1;
 			}
 		}
 		spriteBatch.draw(starScore, starScore.getWidth()/4, liveScore.getHeight()/3-starScore.getHeight()/5); // отрисовка звезды-очков
@@ -483,7 +478,7 @@ public class DropWather implements Screen {
 		Iterator<Rectangle> iter = citzen_rectangle.iterator();
 		while (iter.hasNext()) {
 			Rectangle raindrop = iter.next();
-			raindrop.x -= 200 * Gdx.graphics.getDeltaTime(); //скорость падения
+			raindrop.x -= 200 * Gdx.graphics.getDeltaTime() + speedFaling; //скорость падения
 			if (raindrop.x + 64 < 0) iter.remove(); //если капля ниже нижнего края - удаляем её
 			if (raindrop.overlaps(zombie_rectangle)) { //отслеживание наложения
 				brain_score++;
@@ -494,7 +489,7 @@ public class DropWather implements Screen {
 		Iterator<Rectangle> iter_man_Trident = man_with_trident_rectangle.iterator();
 		while (iter_man_Trident.hasNext()) {
 			Rectangle manTriden_drop = iter_man_Trident.next();
-			manTriden_drop.x -= 250 * Gdx.graphics.getDeltaTime(); //скорость падения
+			manTriden_drop.x -= 250 * Gdx.graphics.getDeltaTime() + speedFaling; //скорость падения
 			if (manTriden_drop.x + 64 < 0) {
 				game_score++;
 				iter_man_Trident.remove(); //если капля ниже нижнего края - удаляем её
@@ -503,6 +498,10 @@ public class DropWather implements Screen {
 				spawn_Boom();
 				liveS_score--;
 				iter_man_Trident.remove();
+				if (liveS_score==0) {
+					gameStatFlag = 2;
+					speedFaling = -200;
+				} //если жизне 0, то скорость двжиения == 0 и гамовер
 			}
 		}
 
